@@ -709,6 +709,15 @@
             return baDaiyaData.filter(d => d.id === daiyaId && d.dayType === dayType);
         }
 
+        /* 今日入力した番号を基準に、対象日のダイヤ番号を計算する
+           (実際の端末の「今日」からの日数差で計算するので、基準日が古くなってもズレない) */
+        function calcDial(target, todayDial) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const diff = Math.round((target - today) / 86400000);
+            return ((todayDial - 1 + diff) % TOTAL_DIALS + TOTAL_DIALS) % TOTAL_DIALS + 1;
+        }
+
         function getTodayString() {
             const now = new Date();
             const days = ['日', '月', '火', '水', '木', '金', '土'];
@@ -896,9 +905,10 @@
             while (start <= end) {
                 const bon = isBonSpecial(start);
                 const currentDayType = getDayType(start);
-                const matches = findData(num, currentDayType);
+                const rotatedDial = calcDial(start, num);
+                const matches = findData(rotatedDial, currentDayType);
                 const dateLabel = `${start.getMonth()+1}/${start.getDate()}（${daysOfWeek[start.getDay()]}）`;
-                rows.push({ dateLabel, dayType: currentDayType, bon, matches, dial: num });
+                rows.push({ dateLabel, dayType: currentDayType, bon, matches, dial: rotatedDial });
                 start.setDate(start.getDate() + 1);
             }
 
