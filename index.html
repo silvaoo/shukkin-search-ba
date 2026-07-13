@@ -73,9 +73,21 @@
             margin-bottom: 20px;
         }
 
-        header .header-spacer {
+        header #share-button {
             width: 34px;
+            height: 34px;
             flex-shrink: 0;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 50%;
+            font-size: 15px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
         }
 
         header .header-text {
@@ -483,7 +495,7 @@
     <canvas id="fireworks-canvas"></canvas>
 
     <header>
-        <div class="header-spacer"></div>
+        <a href="share.html" id="share-button" aria-label="アプリを共有">📤</a>
         <div class="header-text">
             <h1>🚌 出退勤検索くん (BAダイヤ)</h1>
             <p>2026年3月14日改正対応版</p>
