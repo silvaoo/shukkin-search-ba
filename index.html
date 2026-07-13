@@ -81,13 +81,13 @@
             border: 1px solid var(--border-color);
             color: var(--text-color);
             border-radius: 50%;
+            padding: 0;
             font-size: 15px;
             line-height: 1;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
         }
 
         header .header-text {
@@ -495,7 +495,7 @@
     <canvas id="fireworks-canvas"></canvas>
 
     <header>
-        <a href="share.html" id="share-button" aria-label="アプリを共有">📤</a>
+        <button id="share-button" onclick="shareApp()" aria-label="アプリを共有">📤</button>
         <div class="header-text">
             <h1>🚌 出退勤検索くん (BAダイヤ)</h1>
             <p>2026年3月14日改正対応版</p>
@@ -713,6 +713,31 @@
             t.textContent = msg;
             t.classList.add('show');
             setTimeout(() => { t.classList.remove('show'); }, 2500);
+        }
+
+        /* =========================================================
+           アプリ共有: ページ遷移せずその場で共有シートを呼び出す
+           (別ページへの遷移だとService Workerのキャッシュ等で
+           意図せず開けないことがあるため、直接JSで完結させる)
+           ========================================================= */
+        async function shareApp() {
+            const shareUrl = 'https://silvaoo.github.io/shukkin-search-ba/';
+            const shareText = 'BA(出退勤検索くん) BAダイヤ';
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: shareText, text: shareText, url: shareUrl });
+                } catch (e) {
+                    // ユーザーがキャンセルした場合は何もしない
+                }
+            } else {
+                // 共有シートが使えない環境ではリンクをコピーする
+                try {
+                    await navigator.clipboard.writeText(shareUrl);
+                    showToast('📋 リンクをコピーしました');
+                } catch (e) {
+                    showToast(shareUrl);
+                }
+            }
         }
 
         /* =========================================================
