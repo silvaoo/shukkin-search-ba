@@ -1283,6 +1283,10 @@
     <div class="guide-pane" id="paneLog">
       <div class="log-item">
         <div class="log-date">2026/07/18</div>
+        <div class="log-body"><span class="tag tag-fix">重要な修正</span><b>祝日に「平日」の出退勤時間を表示していた不具合を修正しました。</b>元日・海の日・文化の日など、平日に当たる祝日が平日ダイヤとして計算されていました。正しくは「日祝」ダイヤです。お手数ですが、祝日の勤務を確認された方はもう一度検索し直してください。</div>
+      </div>
+      <div class="log-item">
+        <div class="log-date">2026/07/18</div>
         <div class="log-body"><span class="tag tag-new">新機能</span>「📱 入れ方」タブを追加。iPhone・Androidそれぞれの、ホーム画面へのアイコンの入れ方を載せました。LINEで受け取った人もこれを見れば入れられます。</div>
       </div>
       <div class="log-item">
@@ -1440,6 +1444,17 @@
            ========================================================= */
         const BON_SPECIAL_DATES = ["2026-08-13", "2026-08-14", "2026-08-15"];
 
+        /* 祝日の一覧(2026〜2027年・振替休日を含む)。学園前Aダイヤ版と同じ内容。
+           ここに無い日は平日として扱われるため、年が変わったら必ず追加すること。 */
+        const HOLIDAYS = new Set([
+            "2026-01-01","2026-01-12","2026-02-11","2026-02-23","2026-03-20","2026-04-29",
+            "2026-05-03","2026-05-04","2026-05-05","2026-05-06","2026-07-20","2026-08-11",
+            "2026-09-21","2026-09-22","2026-09-23","2026-10-12","2026-11-03","2026-11-23",
+            "2027-01-01","2027-01-11","2027-02-11","2027-02-23","2027-03-21","2027-03-22",
+            "2027-04-29","2027-05-03","2027-05-04","2027-05-05","2027-07-19","2027-08-11",
+            "2027-09-20","2027-09-23","2027-10-11","2027-11-03","2027-11-23"
+        ]);
+
         function toDateKey(dateObj) {
             const y = dateObj.getFullYear();
             const m = String(dateObj.getMonth() + 1).padStart(2, "0");
@@ -1451,11 +1466,17 @@
             return BON_SPECIAL_DATES.includes(toDateKey(dateObj));
         }
 
-        // お盆特例を考慮した曜日区分の判定
+        /* その日が祝日かどうか判定する */
+        function isHoliday(dateObj) {
+            return HOLIDAYS.has(toDateKey(dateObj));
+        }
+
+        // お盆特例・祝日を考慮した曜日区分の判定
         function getDayType(dateObj) {
             if (isBonSpecial(dateObj)) return "土"; // お盆休み中は土曜ダイヤ扱い
             const day = dateObj.getDay();
-            if (day === 0) return "日祝";
+            // 日曜だけでなく「平日に当たる祝日」も日祝ダイヤにする
+            if (day === 0 || isHoliday(dateObj)) return "日祝";
             if (day === 6) return "土";
             return "平";
         }
