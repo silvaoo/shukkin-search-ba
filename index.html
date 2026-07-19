@@ -1036,8 +1036,6 @@
             <input type="number" id="daiya-number" placeholder="1" min="1" max="27" oninput="onDaiyaInput()">
             <span>番ダイヤ</span>
         </div>
-        <p style="text-align:center; font-size:12px; color:var(--muted-text); margin:2px 0 8px;">↑ 1〜27の番号を入力してください</p>
-
         <div id="today-result" class="result-box"></div>
         <div class="mydial-note" id="myDialNote" style="display:none;">
             ✅ この番号を保存しました。明日からは自動で1つ進みます。
@@ -2378,7 +2376,7 @@
             // タイトルは updateClock() が時計として毎秒更新する
 
             if (isNaN(num) || num < 1 || num > 27) {
-                resultEl.innerHTML = '<div class="empty-msg">1〜27の番号を入力してください</div>';
+                resultEl.innerHTML = '<div class="empty-msg">↑ 1〜27の番号を入力してください</div>';
                 return;
             }
 
