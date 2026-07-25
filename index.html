@@ -892,7 +892,18 @@
             z-index: 10000;
             padding: 16px;
         }
-        .source-modal.active { display: flex; align-items: center; }
+        .source-modal.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .source-pdf-btn {
+            display: block; margin: 0 auto 10px; padding: 11px 14px; max-width: 520px; width: 100%;
+            background: linear-gradient(135deg, #ff9f43, #ff7a1a); color: #fff;
+            border-radius: 10px; text-align: center; text-decoration: none;
+            font-size: 15px; font-weight: 800; line-height: 1.4;
+            box-shadow: 0 3px 10px rgba(255,159,67,0.35); flex-shrink: 0;
+        }
+        .source-pdf-btn span {
+            display: block; margin-top: 3px; font-size: 11px; font-weight: 500; opacity: 0.95;
+        }
+        .source-pdf-btn:active { filter: brightness(0.93); }
         .source-modal-content {
             display: flex;
             gap: 10px;
@@ -1451,6 +1462,10 @@
     <!-- 元データ画像モーダル(2枚並べて表示) -->
     <div id="sourceModal" class="source-modal" onclick="closeSourceModal()">
         <button class="source-modal-close" onclick="closeSourceModal()">✕</button>
+        <a class="source-pdf-btn" href="kinmu-keitou-ba.pdf" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+          📄 勤務系統表（全5ページ）を開く
+          <span>系統・行先・中間解放まで載った詳しい表です</span>
+        </a>
         <div class="source-modal-content">
             <img src="images/genpage-1.jpg" alt="出退勤表 元データ 1枚目" onerror="this.replaceWith(Object.assign(document.createElement('div'),{style:'color:#fff;padding:20px;',innerText:'画像準備中です'}))">
             <img src="images/genpage-2.jpg" alt="出退勤表 元データ 2枚目" onerror="this.replaceWith(Object.assign(document.createElement('div'),{style:'color:#fff;padding:20px;',innerText:'画像準備中です'}))">
