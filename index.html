@@ -872,7 +872,26 @@
         }
 
         /* ==== お知らせの中身(画像を縦に並べて見せる) ==== */
-        #newsModal { background: #000; }   /* 後ろの画面が透けないよう完全な黒にする */
+        #newsModal { background: #000; }
+/* お知らせの画像は1枚ずつ縦に並べる。
+   このアプリの元データ表示は「PDFを2枚横に並べる」作りで、
+   その指定がお知らせ側にも効いてしまい、画像が極端に小さくなっていた。
+   #newsModal のときだけ打ち消す（元データ表示には影響しない）。 */
+#newsModal .source-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+}
+#newsModal .source-modal-content img {
+  max-height: none;
+  width: 100%;
+  flex-shrink: 1;
+  border: none;
+}   /* 後ろの画面が透けないよう完全な黒にする */
 #newsModal .news-img-wrap { flex: 1; min-height: 0; width: 100%; overflow: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
         #newsModal .news-img-wrap img:last-child { margin-bottom: 0; }
 #newsModal .news-img-wrap img {
@@ -1936,9 +1955,14 @@
           // オンにするときは、通知の許可と登録をまとめて済ませる
           const ok = await setupPush();
           if(ok){
-            // 番号が未保存だと、いつ知らせればいいか決められない
+            // 番号が未保存だと、いつ知らせればいいか決められない。
+            // 入力欄に番号が入っているだけで保存し忘れている人が多いので、
+            // ここで自動的に保存してしまう。
             if(!getMyDialBase()){
-              showToast('先に「今日のダイヤ番号」を保存してください');
+              try{ saveMyDial(); }catch(e){}
+            }
+            if(!getMyDialBase()){
+              showToast('先に「今日のダイヤ番号」を入力してください');
               renderNotifySettings();
               return;
             }
