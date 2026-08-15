@@ -2248,7 +2248,7 @@
             return `前半、${s[0]}から${s[1]}。後半、${e[0]}から${e[1]}。労働時間は前半${w[0]||''}、後半${w[1]||''}です。`;
         }
 
-        function buildDayCardHtml(dial, dateLabel, dayType, bon, matches, memoHtml) {
+        function buildDayCardHtml(dial, dateLabel, dayType, hol, bon, matches, memoHtml) {
             let dateClass = 'day-date';
             let badgeClass = 'day-badge badge-week';
             let badgeText = '平日';
@@ -2260,7 +2260,7 @@
             if (dayType === '日祝') {
                 dateClass += ' holiday';
                 badgeClass = 'day-badge badge-hday';
-                badgeText = '日祝';
+                badgeText = hol ? '祝日' : '日曜';
             }
 
             const isOff = matches.length === 0 || matches[0].start === '公休' || matches[0].dayType === '全';
@@ -3014,7 +3014,7 @@
                 let cls='cal-day';
                 if(dw===0)cls+=' sun'; if(dw===6)cls+=' sat';
                 if(iso===todayIso)cls+=' today';
-                if(r&&(r.isHol||r.isBon||r.bon))cls+=' hol';
+                if(r&&(r.hol||r.bon))cls+=' hol';
                 if(!r)cls+=' nodata';
 
                 let body='';
@@ -3048,8 +3048,8 @@
             const dt=new Date(iso+'T00:00:00');
             const DWJ=['日','月','火','水','木','金','土'];
             let badge='', bcls='hei';
-            if(r.isBon||r.bon){ badge='お盆(土曜ダイヤ)'; bcls='bon'; }
-            else if(r.isHol){ badge='祝日'; bcls='dosun'; }
+            if(r.bon){ badge='お盆(土曜ダイヤ)'; bcls='bon'; }
+            else if(r.hol){ badge='祝日'; bcls='dosun'; }
             else if(r.dayType==='土'){ badge='土曜'; bcls='dosun'; }
             else if(r.dayType==='日'||r.dayType==='日祝'){ badge='日祝'; bcls='dosun'; }
             else { badge='平日'; bcls='hei'; }
@@ -3093,6 +3093,7 @@
             }
 
             const bon = isObon(now);
+            const hol = isHol(now);
             const currentDayType = dayType(now);
             const matches = findData(num, currentDayType);
 
@@ -3101,7 +3102,7 @@
                 return;
             }
 
-            resultEl.innerHTML = buildDayCardHtml(num, `本日 ${getTodayString()}`, currentDayType, bon, matches);
+            resultEl.innerHTML = buildDayCardHtml(num, `本日 ${getTodayString()}`, currentDayType, hol, bon, matches);
         }
 
         /* 読み上げ中はボタンを「停止する」に変える。
@@ -3202,11 +3203,12 @@
 
             while (start <= end) {
                 const bon = isObon(start);
+                const hol = isHol(start);
                 const currentDayType = dayType(start);
                 const rotatedDial = calcDial(start, num);
                 const matches = findData(rotatedDial, currentDayType);
                 const dateLabel = `${start.getMonth()+1}/${start.getDate()}（${daysOfWeek[start.getDay()]}）`;
-                rows.push({ iso: toISO(start), dateLabel, dayType: currentDayType, bon, matches, dial: rotatedDial });
+                rows.push({ iso: toISO(start), dateLabel, dayType: currentDayType, hol, bon, matches, dial: rotatedDial });
                 start.setDate(start.getDate() + 1);
             }
 
@@ -3231,7 +3233,7 @@
             let html = `<div class="res-summary">${rows.length}日間 ／ 勤務${workCnt}日 ／ 公休${offCnt}日</div>`;
             rows.forEach((r, idx) => {
                 // B案: 1枚ずつ順に現れるよう、カードごとに表示開始を少しずつ遅らせる
-                const card = buildDayCardHtml(r.dial, r.dateLabel, r.dayType, r.bon, r.matches, memoBlockHtml(r.iso, r.dial));
+                const card = buildDayCardHtml(r.dial, r.dateLabel, r.dayType, r.hol, r.bon, r.matches, memoBlockHtml(r.iso, r.dial));
                 html += card;
             });
             // C案: 合計労働時間は自動スクロールが止まる「結果の一番下」に出す
@@ -3285,6 +3287,7 @@
                 const isOff = r.matches.length === 0 || r.matches[0].start === '公休' || r.matches[0].dayType === '全';
                 text += `${r.dateLabel}、${r.dial}番。`;
                 if (r.bon) text += 'お盆休みで土曜ダイヤ。';
+                else if (r.hol) text += '祝日のため日祝ダイヤ。';
                 if (isOff) {
                     text += '公休。';
                 } else {
