@@ -1639,105 +1639,60 @@
            画像2枚(北大和Bダイヤ出退勤表)より入力。
            dayType: "平"=平日 / "土"=土曜 / "日祝"=日祝 / "全"=曜日を問わず同一(公休など)
            ========================================================= */
-        const baDaiyaData = [
-            { id: 1, dayType: "平", start: "5:23", memo: "六条西三丁目ロープ開け", end: "18:10", workTime: "9:44" },
-            { id: 1, dayType: "土", start: "9:11", memo: "", end: "18:00", workTime: "7:35" },
-            { id: 1, dayType: "日祝", start: "9:11", memo: "", end: "18:00", workTime: "7:35" },
-            { id: 2, dayType: "平", start: "6:15 / 12:25", memo: "", end: "17:21 / 21:07", workTime: "5:18 / 3:33" },
-            { id: 2, dayType: "土", start: "5:39", memo: "", end: "12:12", workTime: "5:37" },
-            { id: 2, dayType: "日祝", start: "8:39", memo: "", end: "12:22", workTime: "3:32" },
-            { id: 3, dayType: "平", start: "6:11", memo: "育西開校日・富雄こうのう", end: "19:46", workTime: "9:23" },
-            { id: 3, dayType: "平", start: "6:11", memo: "育西休校日・富雄こうのう", end: "15:45", workTime: "7:59" },
-            { id: 3, dayType: "土", start: "9:13", memo: "富雄こうのう", end: "20:05", workTime: "9:09" },
-            { id: 3, dayType: "日祝", start: "9:13", memo: "富雄こうのう", end: "20:05", workTime: "9:09" },
-            { id: 4, dayType: "平", start: "5:36", memo: "", end: "9:41", workTime: "4:05" },
-            { id: 4, dayType: "土", start: "6:28", memo: "", end: "10:35", workTime: "3:37" },
-            { id: 4, dayType: "日祝", start: "6:28", memo: "", end: "10:35", workTime: "3:37" },
-            { id: 5, dayType: "全", start: "公休", memo: "", end: "", workTime: "" },
-            { id: 6, dayType: "平", start: "5:39", memo: "育西開校日", end: "17:35", workTime: "10:00" },
-            { id: 6, dayType: "平", start: "5:39", memo: "育西休校日", end: "17:35", workTime: "9:00" },
-            { id: 6, dayType: "土", start: "8:32", memo: "", end: "17:48", workTime: "8:16" },
-            { id: 6, dayType: "日祝", start: "8:32", memo: "", end: "17:48", workTime: "8:16" },
-            { id: 7, dayType: "平", start: "6:30", memo: "育西開校日", end: "19:59", workTime: "9:15" },
-            { id: 7, dayType: "平", start: "6:30", memo: "育西休校日", end: "19:59", workTime: "9:06" },
-            { id: 7, dayType: "土", start: "10:23", memo: "", end: "19:21", workTime: "7:55" },
-            { id: 7, dayType: "日祝", start: "10:23", memo: "", end: "19:21", workTime: "7:55" },
-            { id: 8, dayType: "平", start: "18:28", memo: "学北・シーカ鍵閉め", end: "24:32", workTime: "5:51" },
-            { id: 8, dayType: "土", start: "17:00", memo: "", end: "24:09", workTime: "6:17" },
-            { id: 8, dayType: "日祝", start: "17:00", memo: "", end: "24:09", workTime: "6:17" },
-            { id: 9, dayType: "平", start: "16:07", memo: "育西開校日", end: "22:54", workTime: "6:12" },
-            { id: 9, dayType: "平", start: "18:38", memo: "育西休校日", end: "22:54", workTime: "3:52" },
-            { id: 9, dayType: "土", start: "16:34", memo: "", end: "23:48", workTime: "6:05" },
-            { id: 9, dayType: "日祝", start: "16:34", memo: "", end: "23:48", workTime: "6:05" },
-            { id: 10, dayType: "全", start: "公休", memo: "", end: "", workTime: "" },
-            { id: 11, dayType: "全", start: "公休", memo: "", end: "", workTime: "" },
-            { id: 12, dayType: "平", start: "5:33", memo: "", end: "19:26", workTime: "8:55" },
-            { id: 12, dayType: "土", start: "5:53", memo: "", end: "18:45", workTime: "9:50" },
-            { id: 12, dayType: "日祝", start: "5:53", memo: "", end: "18:45", workTime: "9:50" },
-            { id: 13, dayType: "平", start: "6:23 / 10:35", memo: "育西開校日", end: "16:18 / 21:19", workTime: "3:58 / 4:21" },
-            { id: 13, dayType: "平", start: "6:23 / 10:35", memo: "育西休校日", end: "16:18 / 21:19", workTime: "3:58 / 4:21" },
-            { id: 13, dayType: "土", start: "6:03", memo: "六条西三丁目ロープ開け", end: "16:29", workTime: "9:27" },
-            { id: 13, dayType: "土", start: "6:03", memo: "ふれあい休み", end: "14:55", workTime: "7:53" },
-            { id: 13, dayType: "日祝", start: "6:03", memo: "六条西三丁目ロープ開け", end: "16:29", workTime: "9:27" },
-            { id: 13, dayType: "日祝", start: "6:03", memo: "ふれあい休み", end: "14:55", workTime: "7:53" },
-            { id: 14, dayType: "平", start: "5:59", memo: "育西開校日", end: "18:46", workTime: "9:52" },
-            { id: 14, dayType: "平", start: "5:59", memo: "育西休校日", end: "16:06", workTime: "8:15" },
-            { id: 14, dayType: "土", start: "5:20", memo: "", end: "12:05", workTime: "5:39" },
-            { id: 14, dayType: "日祝", start: "5:45", memo: "", end: "12:05", workTime: "5:14" },
-            { id: 15, dayType: "平", start: "5:17", memo: "", end: "10:51", workTime: "5:12" },
-            { id: 15, dayType: "土", start: "5:48", memo: "", end: "10:51", workTime: "4:26" },
-            { id: 15, dayType: "日祝", start: "6:19", memo: "", end: "10:51", workTime: "3:55" },
-            { id: 16, dayType: "全", start: "公休", memo: "", end: "", workTime: "" },
-            { id: 17, dayType: "平", start: "5:21", memo: "本社こうのう", end: "17:34", workTime: "9:41" },
-            { id: 17, dayType: "土", start: "5:34", memo: "", end: "14:28", workTime: "7:32" },
-            { id: 17, dayType: "日祝", start: "6:12", memo: "", end: "14:28", workTime: "6:54" },
-            { id: 18, dayType: "平", start: "5:58 / 11:25", memo: "", end: "16:27 / 21:33", workTime: "5:05 / 4:33" },
-            { id: 18, dayType: "土", start: "6:57 / 9:55", memo: "", end: "17:23 / 21:31", workTime: "2:58 / 4:08" },
-            { id: 18, dayType: "日祝", start: "6:57 / 9:55", memo: "", end: "17:23 / 21:31", workTime: "2:58 / 4:08" },
-            { id: 19, dayType: "平", start: "16:59", memo: "六条西三丁目ロープ閉め", end: "24:14", workTime: "6:51" },
-            { id: 19, dayType: "土", start: "16:50", memo: "六条西三丁目ロープ閉め", end: "23:41", workTime: "5:57" },
-            { id: 19, dayType: "日祝", start: "16:50", memo: "六条西三丁目ロープ閉め", end: "23:41", workTime: "5:57" },
-            { id: 20, dayType: "平", start: "11:33", memo: "", end: "22:32", workTime: "9:11" },
-            { id: 20, dayType: "平", start: "14:13", memo: "ふれあい休み", end: "22:32", workTime: "7:19" },
-            { id: 20, dayType: "土", start: "11:33", memo: "", end: "22:23", workTime: "7:22" },
-            { id: 20, dayType: "土", start: "15:03", memo: "ふれあい休み", end: "22:23", workTime: "5:51" },
-            { id: 20, dayType: "日祝", start: "11:33", memo: "", end: "22:23", workTime: "7:22" },
-            { id: 20, dayType: "日祝", start: "15:03", memo: "ふれあい休み", end: "22:23", workTime: "5:51" },
-            { id: 21, dayType: "全", start: "公休", memo: "", end: "", workTime: "" },
-            { id: 22, dayType: "全", start: "公休", memo: "", end: "", workTime: "" },
-            { id: 23, dayType: "平", start: "6:13", memo: "育西開校日", end: "20:09", workTime: "9:25" },
-            { id: 23, dayType: "平", start: "6:13", memo: "育西休校日", end: "20:09", workTime: "8:44" },
-            { id: 23, dayType: "土", start: "13:13", memo: "", end: "19:51", workTime: "5:57" },
-            { id: 23, dayType: "日祝", start: "13:13", memo: "", end: "19:51", workTime: "5:57" },
-            { id: 24, dayType: "平", start: "5:48", memo: "", end: "16:29", workTime: "9:14" },
-            { id: 24, dayType: "平", start: "5:48", memo: "ふれあい休み", end: "14:55", workTime: "7:40" },
-            { id: 24, dayType: "土", start: "6:39", memo: "", end: "16:15", workTime: "8:19" },
-            { id: 24, dayType: "日祝", start: "6:39", memo: "", end: "16:15", workTime: "8:19" },
-            { id: 25, dayType: "平", start: "5:17", memo: "手入れ・風呂掃除", end: "12:15", workTime: "6:02" },
-            { id: 25, dayType: "土", start: "6:03", memo: "手入れ・風呂掃除", end: "12:04", workTime: "5:24" },
-            { id: 25, dayType: "日祝", start: "6:03", memo: "手入れ・風呂掃除", end: "12:04", workTime: "5:24" },
-            { id: 26, dayType: "平", start: "8:40", memo: "予備", end: "17:50", workTime: "7:39" },
-            { id: 26, dayType: "土", start: "8:40", memo: "予備", end: "17:50", workTime: "7:39" },
-            { id: 26, dayType: "日祝", start: "8:40", memo: "予備", end: "17:50", workTime: "7:39" },
-            { id: 27, dayType: "全", start: "公休", memo: "", end: "", workTime: "" }
-        ];
+
+        /* ==== ダイヤのデータを読み込む ====
+           勤務データ・祝日・お盆・基準日は dia-ba.json にまとめてある。
+           ダイヤ改正のときは、この JSON だけを差し替えればよい。
+
+           読み込みに失敗するとアプリが使えないので、
+           通信できないときのために、いったん端末に控えておく。 */
+        const DIA_JSON = './dia-ba.json';
+        const DIA_CACHE_KEY = 'ba-dia-cache';
+
+        function applyDiaData(d){
+          if(Array.isArray(d.rows)) baDaiyaData = d.rows;
+          HOLIDAYS = new Set(d.holidays || []);
+          BON_SPECIAL_DATES = d.obon || [];
+          if(d.meta){
+            if(d.meta.baseDate){
+              const p = String(d.meta.baseDate).split('-').map(Number);
+              BASE_DATE = new Date(p[0], p[1]-1, p[2]);
+            }
+            if(d.meta.baseDial) BASE_DIAL = d.meta.baseDial;
+            if(d.meta.cycle)    TOTAL_DIALS = d.meta.cycle;
+          }
+        }
+
+        async function loadDiaData(){
+          // まず端末に控えてあるものを使う（通信できなくても動くように）
+          try{
+            const cached = localStorage.getItem(DIA_CACHE_KEY);
+            if(cached) applyDiaData(JSON.parse(cached));
+          }catch(e){}
+
+          try{
+            const res = await fetch(DIA_JSON + '?v=' + Date.now());
+            if(res.ok){
+              const d = await res.json();
+              applyDiaData(d);
+              try{ localStorage.setItem(DIA_CACHE_KEY, JSON.stringify(d)); }catch(e){}
+              return true;
+            }
+          }catch(e){}
+          return baDaiyaData.length > 0;   // 控えがあればそれで動かす
+        }
+
+        let baDaiyaData = [];   // 中身は dia-ba.json から入れる（下の loadDiaData で読み込む）
 
         /* =========================================================
            お盆特例: 2026年8月13日〜15日は「お盆休みで土曜ダイヤ」扱い。
            実際の曜日にかかわらず「土」データを参照して表示する。
            ========================================================= */
-        const BON_SPECIAL_DATES = ["2026-08-13", "2026-08-14", "2026-08-15"];
+        let BON_SPECIAL_DATES = [];   // 中身は dia-ba.json から入れる
 
         /* 祝日の一覧(2026〜2027年・振替休日を含む)。学園前Aダイヤ版と同じ内容。
            ここに無い日は平日として扱われるため、年が変わったら必ず追加すること。 */
-        const HOLIDAYS = new Set([
-            "2026-01-01","2026-01-12","2026-02-11","2026-02-23","2026-03-20","2026-04-29",
-            "2026-05-03","2026-05-04","2026-05-05","2026-05-06","2026-07-20","2026-08-11",
-            "2026-09-21","2026-09-22","2026-09-23","2026-10-12","2026-11-03","2026-11-23",
-            "2027-01-01","2027-01-11","2027-02-11","2027-02-23","2027-03-21","2027-03-22",
-            "2027-04-29","2027-05-03","2027-05-04","2027-05-05","2027-07-19","2027-08-11",
-            "2027-09-20","2027-09-23","2027-10-11","2027-11-03","2027-11-23"
-        ]);
+        let HOLIDAYS = new Set();   // 中身は dia-ba.json から入れる
 
         function toDateKey(dateObj) {
             const y = dateObj.getFullYear();
@@ -1773,9 +1728,9 @@
            ※あくまで「プレースホルダー(薄いヒント)」として見せるだけで、
            実際の値として自動入力はしない(共有ツールのため各自で確認・入力する)。
            ========================================================= */
-        const BASE_DATE = new Date(2026, 6, 13); // 2026年7月13日(月) = 基準日
-        const BASE_DIAL = 1; // 基準日のダイヤ番号
-        const TOTAL_DIALS = 27; // BAダイヤの総番号数(1〜27)
+        let BASE_DATE = new Date();   // 中身は dia-ba.json から入れる
+        let BASE_DIAL = 1;
+        let TOTAL_DIALS = 1;
 
         function calcAutoDial(targetDate) {
             const t = new Date(targetDate);
@@ -3552,7 +3507,8 @@
             document.getElementById('sourceModal').classList.remove('active');
         }
 
-        window.onload = function() {
+        window.onload = async function() {
+            await loadDiaData();   // 先にダイヤのデータを読み込む
             updateClock(); setInterval(updateClock,1000); // 時計を開始
             updateNotifyUI(); // 通知ボタンの表示を復元
             announceRelease(); // ダイヤ改正・新機能の時だけ通知を出す
