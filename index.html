@@ -3149,13 +3149,18 @@
 
             const now = new Date();
             const bon = isObon(now);
+            const hol = isHol(now);
             const currentDayType = dayType(now);
             const matches = findData(num, currentDayType);
 
             if (matches.length === 0) return;
 
-            let speechText = `BAダイヤ、${num}番。`;
-            if (bon) speechText += "本日はお盆休み期間のため、土曜ダイヤで運行します。";
+            // 読み上げの書き出しは他のダイヤと揃える。
+            // 「日付 → 曜日 → ダイヤ番号」の順で、ダイヤ名は読まない。
+            const _m = now.getMonth() + 1, _d = now.getDate();
+            const _dw = ['日','月','火','水','木','金','土'][now.getDay()];
+            const _holLabel = bon ? 'お盆休みで土曜ダイヤ' : (hol ? '祝日' : '');
+            let speechText = `${_m}月${_d}日、${_dw}曜日${_holLabel}。${num}番ダイヤ。`;
             matches.forEach((m, idx) => {
                 if(matches.length > 1) speechText += `パターン${idx + 1}。`;
                 if (m.start === "公休" || m.dayType === "全") {
